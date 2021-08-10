@@ -8,11 +8,6 @@ export interface Paths {
     user: string;
     srcKeybindngs: string;
     repoKeybindings: string;
-
-    // const codePath = path.resolve(dirPath, '../../..');
-    // const userPath = path.resolve(codePath, 'User');
-    // const srcPath = path.resolve(userPath, 'keybindings.json');
-    // const distPath = path.resolve(dirPath, 'keybindings.json');
 }
 
 export function getPaths(context: vscode.ExtensionContext): Paths {

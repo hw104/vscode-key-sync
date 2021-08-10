@@ -10,30 +10,34 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:key-sync.helloWorld",
-		"onCommand:key-sync.upload"
+		"onCommand:key-sync.upload",
+		"onCommand:key-sync.uploadForce"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "key-sync.helloWorld",
-				"title": "Hello World"
+				"command": "key-sync.upload",
+				"title": "key sync: Upload"
 			},
 			{
-				"command": "key-sync.upload",
-				"title": "Upload"
+				"command": "key-sync.uploadForce",
+				"title": "key sync: Upload (Force)"
 			}
 		],
 		"configuration": {
 			"title": "key-sync",
 			"properties": {
 				"key-sync.GitRemoteRepository": {
-					"type": [ "string" ],
+					"type": [
+						"string"
+					],
 					"description": "Specifies an existing git remote repository"
 				},
 				"key-sync.GitBranch": {
-					"type": [ "string" ],
+					"type": [
+						"string"
+					],
 					"description": "Specifies an existing git branch"
 				}
 			}

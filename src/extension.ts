@@ -4,17 +4,9 @@ import { uploadHandler } from './commands/upload';
 import { ErrorWithAction } from './errors';
 
 export function activate(context: vscode.ExtensionContext) {
-	let helloWorld = vscode.commands.registerCommand('key-sync.helloWorld', async () => {
+	const handler = async (cb: () => Promise<any>) => {
 		try {
-			await tmpCommand(context);
-		} catch (e) {
-			vscode.window.showErrorMessage(`${e}`);
-		}
-	});
-
-	let upload = vscode.commands.registerCommand('key-sync.upload', async () => {
-		try {
-			await uploadHandler(context);
+			await cb();
 		} catch (e) {
 			if (e instanceof ErrorWithAction) {
 				const res = await vscode.window.showErrorMessage(e.message, ...Object.keys(e.actions));
@@ -25,10 +17,13 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.showErrorMessage(`${e}`);
 			}
 		}
-	});
+	};
 
-	context.subscriptions.push(helloWorld);
+	let upload = vscode.commands.registerCommand('key-sync.upload', async () => handler(() => uploadHandler(context, {})));
+	let uploadForce = vscode.commands.registerCommand('key-sync.uploadForce', async () => handler(() => uploadHandler(context, {force: true})));
+
 	context.subscriptions.push(upload);
+	context.subscriptions.push(uploadForce);
 }
 
 export function deactivate() { }

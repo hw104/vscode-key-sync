@@ -4,9 +4,13 @@ import { checkConfiguration, Configuration, getConfiguration } from '../config';
 import { EXTENSION_NAME } from '../const';
 import { getGitApi } from '../git_api';
 import { getPaths, Paths } from '../paths';
-import { API as GitApi, Repository } from '../types/git';
+import { API as GitApi, ForcePushMode, Repository } from '../types/git';
 
-export async function uploadHandler(context: vscode.ExtensionContext): Promise<void> {
+interface InnerOption {
+    force?: boolean;
+}
+
+export async function uploadHandler(context: vscode.ExtensionContext, option: InnerOption): Promise<void> {
     const config: Configuration = await getConfiguration();
     if (!checkConfiguration(config)) {
         throw new Error('Unreachable');
@@ -21,10 +25,10 @@ export async function uploadHandler(context: vscode.ExtensionContext): Promise<v
 
     copyKeybindings(paths);
 
-    await commitAndPush(gitApi, paths);
+    await commitAndPush(gitApi, paths, option);
 }
 
-async function commitAndPush(gitApi: GitApi, paths: Paths) {
+async function commitAndPush(gitApi: GitApi, paths: Paths, option: InnerOption) {
     const repo: Repository | null = await gitApi.openRepository(vscode.Uri.parse(paths.repo));
     const state = repo?.state;
     const changes = [
@@ -36,7 +40,11 @@ async function commitAndPush(gitApi: GitApi, paths: Paths) {
         await repo!.commit(`commit by ${EXTENSION_NAME}`, { all: true });
     }
 
-    await repo!.push();
+    if (option.force) {
+        await repo!.push(undefined, undefined, undefined, ForcePushMode.Force);
+    } else {
+        await repo!.push();
+    }
 
     const remote = state?.remotes.find(r => r.name === 'origin');
 
