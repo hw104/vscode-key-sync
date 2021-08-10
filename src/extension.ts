@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { tmpCommand } from './commands/hello_wrold';
+import { updateHandler } from './commands/update';
 import { uploadHandler } from './commands/upload';
-import { ErrorWithAction } from './errors';
+import { ErrorWithAction } from './types/errors';
 
 export function activate(context: vscode.ExtensionContext) {
 	const handler = async (cb: () => Promise<any>) => {
@@ -19,11 +19,16 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	};
 
-	let upload = vscode.commands.registerCommand('key-sync.upload', async () => handler(() => uploadHandler(context, {})));
-	let uploadForce = vscode.commands.registerCommand('key-sync.uploadForce', async () => handler(() => uploadHandler(context, {force: true})));
+	const upload = vscode.commands.registerCommand('key-sync.upload', async () => handler(() => uploadHandler(context)));
+	const uploadForce = vscode.commands.registerCommand('key-sync.uploadForce', async () => handler(() => uploadHandler(context, {force: true})));
+
+	const update = vscode.commands.registerCommand('key-sync.update', async () => handler(() => updateHandler(context)));
+	const updateForce = vscode.commands.registerCommand('key-sync.updateForce', async () => handler(() => updateHandler(context, {force: true})));
 
 	context.subscriptions.push(upload);
 	context.subscriptions.push(uploadForce);
+	context.subscriptions.push(update);
+	context.subscriptions.push(updateForce);
 }
 
 export function deactivate() { }

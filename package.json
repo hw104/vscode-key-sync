@@ -1,7 +1,7 @@
 {
 	"name": "key-sync",
 	"displayName": "Key Sync",
-	"description": "sharing keybinding.json with own git repository",
+	"description": "Tiny Visual Studio Code Extension Synchronize **only** keybinding configuration.",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.59.0"
@@ -11,22 +11,32 @@
 	],
 	"activationEvents": [
 		"onCommand:key-sync.upload",
-		"onCommand:key-sync.uploadForce"
+		"onCommand:key-sync.uploadForce",
+		"onCommand:key-sync.update",
+		"onCommand:key-sync.updateForce"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "key-sync.upload",
-				"title": "key sync: Upload"
+				"title": "Key Sync: Upload"
 			},
 			{
 				"command": "key-sync.uploadForce",
-				"title": "key sync: Upload (Force)"
+				"title": "Key Sync: Upload (Force)"
+			},
+			{
+				"command": "key-sync.update",
+				"title": "Key Sync: Update"
+			},
+			{
+				"command": "key-sync.updateForce",
+				"title": "Key Sync: Update (Force)"
 			}
 		],
 		"configuration": {
-			"title": "key-sync",
+			"title": "Key Sync",
 			"properties": {
 				"key-sync.GitRemoteRepository": {
 					"type": [

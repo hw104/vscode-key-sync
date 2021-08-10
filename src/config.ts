@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { CONFIG_GIT_BRANCH, CONFIG_REMOTE_REPO, EXTENSION_NAME } from './const';
-import { ErrorWithAction } from './errors';
+import { ErrorWithAction } from './types/errors';
 
 export interface Configuration {
     remoteRepo?: string;
