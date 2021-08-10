@@ -16,7 +16,7 @@ export function getPaths(context: vscode.ExtensionContext): Paths {
     const userPath = path.resolve(codePath, 'User');
     const srcPath = path.resolve(userPath, 'keybindings.json');
 
-    const repoPath = path.resolve(globalStorage, 'git');
+    const repoPath = path.resolve(globalStorage, 'key-sync-git');
     const repoKeybindingsPath = path.resolve(repoPath, 'keybindings.json');
 
     return {
