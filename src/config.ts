@@ -19,7 +19,7 @@ export function checkConfiguration(config: Configuration): config is Required<Co
         throw new ErrorWithAction(
             'Please specify an existing git remote repository.',
             {
-                'Open Configuration': async () => {}, // TODO: open configuration UI
+                'Open Configuration': async () => await vscode.commands.executeCommand('workbench.action.openSettings', 'key-sync.GitRemoteRepository'),
             }
         );
     }
@@ -28,7 +28,7 @@ export function checkConfiguration(config: Configuration): config is Required<Co
         throw new ErrorWithAction(
             'Please specify an existing git branch',
             {
-                'Open Configuration': async () => {}, // TODO: open configuration UI
+                'Open Configuration': async () => await vscode.commands.executeCommand('workbench.action.openSettings', 'key-sync.GitBranch'),
             }
         );
     }
