@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import { initHandler } from "./commands/init";
+import { loadHandler } from "./commands/load";
 import { openHandler } from "./commands/open";
+import { saveHandler } from "./commands/save";
 import { ErrorWithAction } from "./types/errors";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -27,10 +29,10 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const save = vscode.commands.registerCommand("key-sync.save", async () =>
-    handler(() => openHandler(context))
+    handler(() => saveHandler(context))
   );
   const load = vscode.commands.registerCommand("key-sync.load", async () =>
-    handler(() => openHandler(context))
+    handler(() => loadHandler(context))
   );
   const open = vscode.commands.registerCommand("key-sync.open", async () =>
     handler(() => openHandler(context))
