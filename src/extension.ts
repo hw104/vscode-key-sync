@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
-import { updateHandler } from "./commands/update";
-import { uploadHandler } from "./commands/upload";
+import { openHandler } from "./commands/open";
 import { ErrorWithAction } from "./types/errors";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -22,26 +21,19 @@ export function activate(context: vscode.ExtensionContext) {
     }
   };
 
-  const upload = vscode.commands.registerCommand("key-sync.upload", async () =>
-    handler(() => uploadHandler(context))
+  const save = vscode.commands.registerCommand("key-sync.save", async () =>
+    handler(() => openHandler(context))
   );
-  const uploadForce = vscode.commands.registerCommand(
-    "key-sync.uploadForce",
-    async () => handler(() => uploadHandler(context, { force: true }))
+  const load = vscode.commands.registerCommand("key-sync.load", async () =>
+    handler(() => openHandler(context))
   );
-
-  const update = vscode.commands.registerCommand("key-sync.update", async () =>
-    handler(() => updateHandler(context))
-  );
-  const updateForce = vscode.commands.registerCommand(
-    "key-sync.updateForce",
-    async () => handler(() => updateHandler(context, { force: true }))
+  const open = vscode.commands.registerCommand("key-sync.open", async () =>
+    handler(() => openHandler(context))
   );
 
-  context.subscriptions.push(upload);
-  context.subscriptions.push(uploadForce);
-  context.subscriptions.push(update);
-  context.subscriptions.push(updateForce);
+  context.subscriptions.push(save);
+  context.subscriptions.push(load);
+  context.subscriptions.push(open);
 }
 
 export function deactivate() {}
