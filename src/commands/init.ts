@@ -13,10 +13,7 @@ export async function initLocalRepo(
     fs.mkdirSync(paths.globalStorage);
   }
 
-  if (fs.existsSync(paths.repo)) {
-    fs.rm(paths.repo, { recursive: true, force: true }, () => {});
-    fs.mkdirSync(paths.repo);
-  } else {
+  if (!fs.existsSync(paths.repo)) {
     fs.mkdirSync(paths.repo);
   }
 
@@ -31,16 +28,16 @@ export async function initLocalRepo(
     throw Error("Initialize git repository failure");
   }
 
-  const state = repo.state;
-  console.log("state", state);
+  await repo.status();
 
-  if (state.remotes.length === 0) {
+  if (repo.state.remotes.length === 0) {
     await repo.addRemote("origin", config.remoteRepo);
+    await repo.status();
   }
 
   await repo.fetch();
 
-  if (state.HEAD?.name !== config.branch) {
+  if (repo.state.HEAD?.name !== config.branch) {
     await repo.checkout(config.branch);
   }
 }
