@@ -1,30 +1,30 @@
-import * as path from 'path';
-import * as vscode from 'vscode';
+import * as path from "path";
+import * as vscode from "vscode";
+import { FullfiledConfig } from "./config";
 
 export interface Paths {
-    repo: string;
-    globalStorage: string;
-    code: string;
-    user: string;
-    srcKeybindngs: string;
-    repoKeybindings: string;
+  localRepo: string;
+  globalStorage: string;
+  vscode: string;
+  user: string;
+  originalKeybindngs: string;
+  repoKeybindings: (config: FullfiledConfig) => string;
 }
 
 export function getPaths(context: vscode.ExtensionContext): Paths {
-    const globalStorage = context.globalStorageUri.path;
-    const codePath = path.resolve(globalStorage, '../../..');
-    const userPath = path.resolve(codePath, 'User');
-    const srcPath = path.resolve(userPath, 'keybindings.json');
+  const globalStorage = context.globalStorageUri.path;
+  const codePath = path.resolve(globalStorage, "../../..");
+  const userPath = path.resolve(codePath, "User");
+  const originalKeybindngs = path.resolve(userPath, "keybindings.json");
 
-    const repoPath = path.resolve(globalStorage, 'key-sync-git');
-    const repoKeybindingsPath = path.resolve(repoPath, 'keybindings.json');
+  const repoPath = path.resolve(globalStorage, "key-sync-git");
 
-    return {
-        globalStorage: globalStorage,
-        repo: repoPath,
-        code: codePath,
-        srcKeybindngs: srcPath,
-        repoKeybindings: repoKeybindingsPath,
-        user: userPath,
-    };
+  return {
+    globalStorage,
+    localRepo: repoPath,
+    vscode: codePath,
+    originalKeybindngs,
+    repoKeybindings: (config) => path.resolve(repoPath, config.srcPath),
+    user: userPath,
+  };
 }

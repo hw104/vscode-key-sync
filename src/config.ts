@@ -1,12 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
-import {
-  CONFIG_GIT_BRANCH,
-  CONFIG_GIT_SRC_PATH,
-  CONFIG_REMOTE_REPO,
-  EXTENSION_NAME,
-} from "./const";
 import { ErrorWithAction } from "./types/errors";
+
+export const EXTENSION_NAME = "key-sync";
 
 export interface Configuration {
   remoteRepo: string | undefined;
@@ -19,13 +15,14 @@ export type FullfiledConfig = Fullfiled<Configuration>;
 type IRepo<T, K extends keyof T> = {
   get: () => Promise<T[K]>;
   set: (value: T[K]) => Promise<void>;
+  fullConfigKey: string;
 };
 type Repo<T> = { [K in keyof T]: IRepo<T, K> };
 
 const configKey: Record<keyof Configuration, string> = {
-  branch: CONFIG_GIT_BRANCH,
-  remoteRepo: CONFIG_REMOTE_REPO,
-  srcPath: CONFIG_GIT_SRC_PATH,
+  branch: "GitBranch",
+  remoteRepo: "GitRemoteRepository",
+  srcPath: "GitSrcPath",
 };
 
 export function isEqualConfig(a: Configuration, b: Configuration): boolean {
@@ -50,6 +47,7 @@ export function configRepo(): Repo<Configuration> {
             value,
             vscode.ConfigurationTarget.Global
           ),
+        fullConfigKey: `${EXTENSION_NAME}.${configKey[current]}`,
       },
     }),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,7 +55,7 @@ export function configRepo(): Repo<Configuration> {
   );
 }
 
-export async function getConfiguration(): Promise<Configuration> {
+export async function loadAllConfig(): Promise<Configuration> {
   const repo = configRepo();
   return {
     remoteRepo: await repo.remoteRepo.get(),
@@ -66,15 +64,14 @@ export async function getConfiguration(): Promise<Configuration> {
   };
 }
 
-export function checkConfiguration(
-  config: Configuration
-): config is FullfiledConfig {
+export function checkConfig(config: Configuration): config is FullfiledConfig {
   return !!config.branch && !!config.remoteRepo && !!config.srcPath;
 }
 
 export async function complementAndSaveConfig(
   config: Configuration
 ): Promise<FullfiledConfig> {
+  const repo = configRepo();
   let remoteRepo = config.remoteRepo;
   let branch = config.branch;
   let srcPath = config.srcPath;
@@ -98,7 +95,7 @@ export async function complementAndSaveConfig(
         "Open Configuration": async () =>
           await vscode.commands.executeCommand(
             "workbench.action.openSettings",
-            `${EXTENSION_NAME}.${CONFIG_REMOTE_REPO}`
+            repo.remoteRepo.fullConfigKey,
           ),
       }
     );
@@ -121,7 +118,7 @@ export async function complementAndSaveConfig(
       "Open Configuration": async () =>
         await vscode.commands.executeCommand(
           "workbench.action.openSettings",
-          `${EXTENSION_NAME}.${CONFIG_GIT_BRANCH}`
+          repo.branch.fullConfigKey,
         ),
     });
   }
@@ -146,7 +143,7 @@ export async function complementAndSaveConfig(
         "Open Configuration": async () =>
           await vscode.commands.executeCommand(
             "workbench.action.openSettings",
-            `${EXTENSION_NAME}.${CONFIG_GIT_SRC_PATH}`
+            repo.srcPath.fullConfigKey,
           ),
       }
     );

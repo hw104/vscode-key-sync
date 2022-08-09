@@ -9,7 +9,7 @@ export async function openHandler(
   const gitApi = await getGitApi();
   const paths = getPaths(context);
 
-  const repo = await gitApi.openRepository(vscode.Uri.parse(paths.repo));
+  const repo = await gitApi.openRepository(vscode.Uri.parse(paths.localRepo));
   if (repo != null) {
     return;
   }
@@ -19,7 +19,7 @@ export async function openHandler(
     "Close"
   );
   if (res !== "Initialize") {
-    return;
+    throw new Error("Failed to open repository");
   }
   await initHandler(context);
 }
