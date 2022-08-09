@@ -2,17 +2,26 @@
 
 Synchronize **only** keybinding configuration. Using git repository not Gitst.
 
-## Commands
-
-- `key-sync.upload`: `commit` and `push` current keybindings.json.
-- `key-sync.update`: `pull` keybindings.json from remote repository.
-
 ## Requirements
 
-- Remote git repository
+- Remote git repository that include keybindings.json
+
+## Setup
+
+1. `Key Sync: Initialize local repository`
+
+
+## Commands
+
+- `key-sync.init`: Initialize local repository from remote repository.
+- `key-sync.open`: Open local repository with Source Control panel.
+- `key-sync.save`: Save current keyboard shortcuts to local repository.
+- `key-sync.load`: Load keyboard shortcuts from local repository and apply it.
 
 ## Extension Settings
 
 This extension contributes the following settings:
 
-* `key-sync.RepoFolder`: path to your repository folder
+* `key-sync.GitRemoteRepository`: Specifies an existing git remote repository
+* `key-sync.GitBranch`: Specifies an existing git branch
+* `key-sync.GitSrcPath`: Specifies an existing json file path

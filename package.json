@@ -41,18 +41,18 @@
       "properties": {
         "key-sync.GitRemoteRepository": {
           "type": "string",
-          "examples": [
-            "https://github.com/hw104/vscode-keybindings.git"
-          ],
-          "description": "Specifies an existing git remote repository"
+          "description": "Specifies an existing git remote repository. Example: `https://github.com/hw104/vscode-keybindings.git`",
+          "markdownDescription": "Specifies an existing git remote repository. Example: `https://github.com/hw104/vscode-keybindings.git`"
         },
         "key-sync.GitBranch": {
           "type": "string",
-          "description": "Specifies an existing git branch"
+          "description": "Specifies an existing git branch. Example: `main`, `master`, `windows`, `linux`",
+          "markdownDescription": "Specifies an existing git branch. Examples: `main`, `master`, `windows`, `linux`"
         },
         "key-sync.GitSrcPath": {
           "type": "string",
-          "description": "Specifies an existing json file path"
+          "description": "Specifies an existing json file path. Examples: `keybindings.json`, `key/keybindings_win.json`.",
+          "markdownDescription": "Specifies an existing json file path. Examples: `keybindings.json`, `key/keybindings_win.json`."
         }
       }
     }
