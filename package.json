@@ -25,7 +25,7 @@
       },
       {
         "command": "key-sync.load",
-        "title": "Key Sync: Apply local repository json file to keyboard shortcuts"
+        "title": "Key Sync: Load local repository json file to keyboard shortcuts"
       },
       {
         "command": "key-sync.open",
@@ -40,21 +40,18 @@
       "title": "Key Sync",
       "properties": {
         "key-sync.GitRemoteRepository": {
-          "type": [
-            "string"
+          "type": "string",
+          "examples": [
+            "https://github.com/hw104/vscode-keybindings.git"
           ],
           "description": "Specifies an existing git remote repository"
         },
         "key-sync.GitBranch": {
-          "type": [
-            "string"
-          ],
+          "type": "string",
           "description": "Specifies an existing git branch"
         },
         "key-sync.GitSrcPath": {
-          "type": [
-            "string"
-          ],
+          "type": "string",
           "description": "Specifies an existing json file path"
         }
       }
