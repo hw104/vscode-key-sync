@@ -1,9 +1,11 @@
 import * as vscode from "vscode";
+import { initHandler } from "./commands/init";
 import { openHandler } from "./commands/open";
 import { ErrorWithAction } from "./types/errors";
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function activate(context: vscode.ExtensionContext) {
-  const handler = async (cb: () => Promise<any>) => {
+  const handler = async (cb: () => Promise<unknown>) => {
     try {
       await cb();
     } catch (e) {
@@ -17,6 +19,9 @@ export function activate(context: vscode.ExtensionContext) {
         }
       } else {
         vscode.window.showErrorMessage(`${e}`);
+        if (context.extensionMode === vscode.ExtensionMode.Development) {
+          throw e;
+        }
       }
     }
   };
@@ -30,10 +35,15 @@ export function activate(context: vscode.ExtensionContext) {
   const open = vscode.commands.registerCommand("key-sync.open", async () =>
     handler(() => openHandler(context))
   );
+  const init = vscode.commands.registerCommand("key-sync.init", async () =>
+    handler(() => initHandler(context))
+  );
 
   context.subscriptions.push(save);
   context.subscriptions.push(load);
   context.subscriptions.push(open);
+  context.subscriptions.push(init);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-module-boundary-types
 export function deactivate() {}

@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as vscode from "vscode";
-import { complementConfig, getConfiguration } from "../config";
+import { complementAndSaveConfig, getConfiguration } from "../config";
 import { getGitApi } from "../git_api";
 import { getPaths } from "../paths";
 import { Repository } from "../types/git";
@@ -14,7 +14,7 @@ export async function updateHandler(
   context: vscode.ExtensionContext,
   option: InnerOption = { force: false }
 ): Promise<void> {
-  const config = await complementConfig(await getConfiguration());
+  const config = await complementAndSaveConfig(await getConfiguration());
   console.log("config", config);
 
   const gitApi = await getGitApi();

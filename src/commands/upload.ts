@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as vscode from "vscode";
-import { complementConfig, Configuration, getConfiguration } from "../config";
+import { complementAndSaveConfig, Configuration, getConfiguration } from "../config";
 import { EXTENSION_NAME } from "../const";
 import { getGitApi } from "../git_api";
 import { getPaths, Paths } from "../paths";
@@ -15,7 +15,7 @@ export async function uploadHandler(
   context: vscode.ExtensionContext,
   option: InnerOption = { force: false }
 ): Promise<void> {
-  const config = await complementConfig(await getConfiguration());
+  const config = await complementAndSaveConfig(await getConfiguration());
   console.log("config", config);
 
   const gitApi = await getGitApi();
