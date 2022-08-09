@@ -64,8 +64,8 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
-    "package": "vsce package --yarn",
-    "publish": "vsce publish --yarn",
+    "vscode:package": "vsce package --yarn",
+    "vscode:publish": "vsce publish --yarn",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
