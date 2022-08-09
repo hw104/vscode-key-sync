@@ -45,7 +45,11 @@ export function configRepo(): Repo<Configuration> {
       [current]: {
         get: () => c.get(configKey[current]) ?? undefined,
         set: async (value: unknown) =>
-          await c.update(configKey[current], value),
+          await c.update(
+            configKey[current],
+            value,
+            vscode.ConfigurationTarget.Global
+          ),
       },
     }),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
