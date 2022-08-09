@@ -7,6 +7,11 @@
   "engines": {
     "vscode": "^1.59.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hw104/vscode-key-sync.git"
+  },
+  "license": "MIT",
   "categories": [
     "Other"
   ],
@@ -59,6 +64,8 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
+    "package": "vsce package --yarn",
+    "publish": "vsce publish --yarn",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
