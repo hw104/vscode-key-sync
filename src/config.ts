@@ -68,7 +68,7 @@ export async function complementConfig(
   let branch = config.branch;
   let srcPath = config.srcPath;
 
-  if (remoteRepo == null) {
+  if (!remoteRepo) {
     remoteRepo = await vscode.window.showInputBox({
       title: "Git remote repository",
       placeHolder: "ex: https://github.com/hw104/vscode-keybindings.git",
@@ -80,7 +80,7 @@ export async function complementConfig(
       },
     });
   }
-  if (remoteRepo == null || remoteRepo.length === 0) {
+  if (!remoteRepo) {
     throw new ErrorWithAction(
       "Please specify an existing git remote repository.",
       {
@@ -93,7 +93,7 @@ export async function complementConfig(
     );
   }
 
-  if (branch == null) {
+  if (!branch) {
     branch = await vscode.window.showInputBox({
       title: "Git branch",
       placeHolder: "main",
@@ -105,7 +105,7 @@ export async function complementConfig(
       },
     });
   }
-  if (branch == null || branch.length === 0) {
+  if (!branch) {
     throw new ErrorWithAction("Please specify an existing git branch", {
       "Open Configuration": async () =>
         await vscode.commands.executeCommand(
@@ -115,7 +115,7 @@ export async function complementConfig(
     });
   }
 
-  if (srcPath == null) {
+  if (!srcPath) {
     srcPath = await vscode.window.showInputBox({
       title: "src file path",
       placeHolder: "keybindings.json",
@@ -128,14 +128,17 @@ export async function complementConfig(
       },
     });
   }
-  if (srcPath == null || srcPath.length === 0) {
-    throw new ErrorWithAction("Please specify an existing git branch", {
-      "Open Configuration": async () =>
-        await vscode.commands.executeCommand(
-          "workbench.action.openSettings",
-          `${EXTENSION_NAME}.${CONFIG_GIT_SRC_PATH}`
-        ),
-    });
+  if (!srcPath) {
+    throw new ErrorWithAction(
+      "Please specify an existing json file path  aaa",
+      {
+        "Open Configuration": async () =>
+          await vscode.commands.executeCommand(
+            "workbench.action.openSettings",
+            `${EXTENSION_NAME}.${CONFIG_GIT_SRC_PATH}`
+          ),
+      }
+    );
   }
 
   return {
