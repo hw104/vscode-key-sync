@@ -5,7 +5,7 @@ import { EXTENSION_NAME } from "../const";
 import { getGitApi } from "../git_api";
 import { getPaths, Paths } from "../paths";
 import { API as GitApi, ForcePushMode, Repository } from "../types/git";
-import { initRepoMaybe } from "./init";
+import { initLocalRepo } from "./init";
 
 interface InnerOption {
   force: boolean;
@@ -21,7 +21,7 @@ export async function uploadHandler(
   const gitApi = await getGitApi();
   const paths = getPaths(context);
 
-  await initRepoMaybe(gitApi, config, paths);
+  await initLocalRepo(gitApi, config, paths);
 
   copyKeybindings(paths);
 
@@ -64,5 +64,5 @@ function copyKeybindings(paths: Paths) {
     throw new Error("keybindings.json is not exists");
   }
 
-  fs.copyFileSync(paths.srcKeybindngs, paths.repoKeybindings);
+  fs.copyFileSync(paths.srcKeybindngs, paths.repoKeybindings); // src, dist
 }

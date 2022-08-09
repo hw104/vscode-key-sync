@@ -1,11 +1,18 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable @typescript-eslint/naming-convention */
 import * as vscode from "vscode";
-import { CONFIG_GIT_BRANCH, CONFIG_REMOTE_REPO, EXTENSION_NAME } from "./const";
+import {
+  CONFIG_GIT_BRANCH,
+  CONFIG_GIT_SRC_PATH,
+  CONFIG_REMOTE_REPO,
+  EXTENSION_NAME,
+} from "./const";
 import { ErrorWithAction } from "./types/errors";
 
 export interface Configuration {
   remoteRepo?: string;
   branch?: string;
+  srcPath?: string;
 }
 
 export async function getConfiguration(): Promise<Configuration> {
@@ -18,6 +25,10 @@ export async function getConfiguration(): Promise<Configuration> {
       vscode.workspace
         .getConfiguration(EXTENSION_NAME)
         .get<string>(CONFIG_GIT_BRANCH) ?? undefined,
+    srcPath:
+      vscode.workspace
+        .getConfiguration(EXTENSION_NAME)
+        .get<string>(CONFIG_GIT_SRC_PATH) ?? undefined,
   };
 }
 
@@ -55,8 +66,8 @@ export async function complementConfig(
 ): Promise<Required<Configuration>> {
   let remoteRepo = config.remoteRepo;
   let branch = config.branch;
+  let srcPath = config.srcPath;
 
-  // eslint-disable-next-line eqeqeq
   if (remoteRepo == null) {
     remoteRepo = await vscode.window.showInputBox({
       title: "Git remote repository",
@@ -69,7 +80,6 @@ export async function complementConfig(
       },
     });
   }
-  // eslint-disable-next-line eqeqeq
   if (remoteRepo == null || remoteRepo.length === 0) {
     throw new ErrorWithAction(
       "Please specify an existing git remote repository.",
@@ -77,13 +87,12 @@ export async function complementConfig(
         "Open Configuration": async () =>
           await vscode.commands.executeCommand(
             "workbench.action.openSettings",
-            "key-sync.GitRemoteRepository"
+            `${EXTENSION_NAME}.${CONFIG_REMOTE_REPO}`
           ),
       }
     );
   }
 
-  // eslint-disable-next-line eqeqeq
   if (branch == null) {
     branch = await vscode.window.showInputBox({
       title: "Git branch",
@@ -96,13 +105,35 @@ export async function complementConfig(
       },
     });
   }
-  // eslint-disable-next-line eqeqeq
   if (branch == null || branch.length === 0) {
     throw new ErrorWithAction("Please specify an existing git branch", {
       "Open Configuration": async () =>
         await vscode.commands.executeCommand(
           "workbench.action.openSettings",
-          "key-sync.GitBranch"
+          `${EXTENSION_NAME}.${CONFIG_GIT_BRANCH}`
+        ),
+    });
+  }
+
+  if (srcPath == null) {
+    srcPath = await vscode.window.showInputBox({
+      title: "src file path",
+      placeHolder: "keybindings.json",
+      value: "keybindings.json",
+      validateInput: (value) => {
+        if (value.length === 0) {
+          return "Please specify an existing json file path";
+        }
+        return;
+      },
+    });
+  }
+  if (srcPath == null || srcPath.length === 0) {
+    throw new ErrorWithAction("Please specify an existing git branch", {
+      "Open Configuration": async () =>
+        await vscode.commands.executeCommand(
+          "workbench.action.openSettings",
+          `${EXTENSION_NAME}.${CONFIG_GIT_SRC_PATH}`
         ),
     });
   }
@@ -110,5 +141,6 @@ export async function complementConfig(
   return {
     branch,
     remoteRepo,
+    srcPath,
   };
 }

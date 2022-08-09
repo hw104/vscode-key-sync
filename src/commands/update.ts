@@ -4,7 +4,7 @@ import { complementConfig, getConfiguration } from "../config";
 import { getGitApi } from "../git_api";
 import { getPaths } from "../paths";
 import { Repository } from "../types/git";
-import { initRepoMaybe } from "./init";
+import { initLocalRepo } from "./init";
 
 interface InnerOption {
   force: boolean;
@@ -20,7 +20,7 @@ export async function updateHandler(
   const gitApi = await getGitApi();
   const paths = getPaths(context);
 
-  await initRepoMaybe(gitApi, config, paths);
+  await initLocalRepo(gitApi, config, paths);
 
   const repo: Repository | null = await gitApi.openRepository(
     vscode.Uri.parse(paths.repo)

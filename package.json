@@ -50,6 +50,12 @@
 						"string"
 					],
 					"description": "Specifies an existing git branch"
+				},
+				"key-sync.GitSrcPath": {
+					"type": [
+						"string"
+					],
+					"description": "Specifies an existing json file path"
 				}
 			}
 		}
