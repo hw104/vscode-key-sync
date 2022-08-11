@@ -1,7 +1,11 @@
 /* eslint-disable eqeqeq */
 import * as fs from "fs";
 import * as vscode from "vscode";
-import { complementAndSaveConfig, FullfiledConfig, loadAllConfig as loadAllConfig } from "../config";
+import {
+  complementAndSaveConfig,
+  FullfiledConfig,
+  loadAllConfig as loadAllConfig,
+} from "../config";
 import { getGitApi } from "../git_api";
 import { getPaths, Paths } from "../paths";
 import { API as GitApi } from "../types/git";
@@ -12,11 +16,11 @@ export async function initLocalRepo(
   paths: Paths
 ): Promise<void> {
   if (!fs.existsSync(paths.globalStorage)) {
-    fs.mkdirSync(paths.globalStorage);
+    fs.mkdirSync(paths.globalStorage, { recursive: true });
   }
 
   if (!fs.existsSync(paths.localRepo)) {
-    fs.mkdirSync(paths.localRepo);
+    fs.mkdirSync(paths.localRepo, { recursive: true });
   } else {
     fs.rmSync(paths.localRepo, { recursive: true, force: true });
     fs.rmdir(paths.localRepo, () => null);

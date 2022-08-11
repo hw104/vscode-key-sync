@@ -2,7 +2,7 @@
   "name": "key-sync",
   "displayName": "Key Sync",
   "description": "Tiny VSCode Extension Synchronize **only** keybinding configuration.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "hw104",
   "engines": {
     "vscode": "^1.59.0"
@@ -83,7 +83,7 @@
     "glob": "^7.1.7",
     "mocha": "^8.4.0",
     "typescript": "^4.7.4",
-    "vsce": "^1.96.1",
+    "vsce": "^2.10.0",
     "vscode-test": "^1.5.2"
   }
 }

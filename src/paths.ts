@@ -13,18 +13,19 @@ export interface Paths {
 
 export function getPaths(context: vscode.ExtensionContext): Paths {
   const globalStorage = context.globalStorageUri.path;
+  const localRepo = path.resolve(globalStorage, "key-sync-git");
+
   const codePath = path.resolve(globalStorage, "../../..");
   const userPath = path.resolve(codePath, "User");
   const originalKeybindngs = path.resolve(userPath, "keybindings.json");
 
-  const repoPath = path.resolve(globalStorage, "key-sync-git");
 
   return {
     globalStorage,
-    localRepo: repoPath,
+    localRepo,
     vscode: codePath,
     originalKeybindngs,
-    repoKeybindings: (config) => path.resolve(repoPath, config.srcPath),
+    repoKeybindings: (config) => path.resolve(localRepo, config.srcPath),
     user: userPath,
   };
 }
