@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { cheatHandler } from "./commands/cheat";
 import { closeHandler } from "./commands/close";
 import { initHandler } from "./commands/init";
 import { loadHandler } from "./commands/load";
@@ -48,6 +49,9 @@ export function activate(context: vscode.ExtensionContext) {
   const close = vscode.commands.registerCommand("key-sync.close", async () =>
     handler(() => closeHandler(context))
   );
+  const cheat = vscode.commands.registerCommand("key-sync.cheat", async () =>
+    handler(() => cheatHandler(context))
+  );
 
   context.subscriptions.push(save);
   context.subscriptions.push(load);
@@ -55,6 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(init);
   context.subscriptions.push(sync);
   context.subscriptions.push(close);
+  context.subscriptions.push(cheat);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-module-boundary-types

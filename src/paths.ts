@@ -9,6 +9,7 @@ export interface Paths {
   user: string;
   originalKeybindngs: string;
   repoKeybindings: (config: FullfiledConfig) => string;
+  repoFile: (repoRelativePath: string) => string;
 }
 
 export function getPaths(context: vscode.ExtensionContext): Paths {
@@ -25,7 +26,8 @@ export function getPaths(context: vscode.ExtensionContext): Paths {
     localRepo,
     vscode: codePath,
     originalKeybindngs,
-    repoKeybindings: (config) => path.resolve(localRepo, config.srcPath),
     user: userPath,
+    repoKeybindings: (config) => path.resolve(localRepo, config.srcPath),
+    repoFile: (rPath) => path.resolve(localRepo, rPath),
   };
 }

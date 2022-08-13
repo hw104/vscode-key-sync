@@ -8,9 +8,16 @@ export interface Configuration {
   remoteRepo: string | undefined;
   branch: string | undefined;
   srcPath: string | undefined;
+  readmePath: string | undefined;
 }
-type Fullfiled<T> = { [K in keyof T]: NonNullable<T[K]> };
-export type FullfiledConfig = Fullfiled<Configuration>;
+export interface FullfiledConfig {
+  remoteRepo: string;
+  branch: string;
+  srcPath: string;
+  readmePath: string | undefined;
+}
+// type Fullfiled<T> = { [K in keyof T]: NonNullable<T[K]> };
+// export type FullfiledConfig = Fullfiled<Configuration>;
 
 type IRepo<T, K extends keyof T> = {
   get: () => Promise<T[K]>;
@@ -23,6 +30,7 @@ const configKey: Record<keyof Configuration, string> = {
   branch: "GitBranch",
   remoteRepo: "GitRemoteRepository",
   srcPath: "GitSrcPath",
+  readmePath: "GitReadmePath",
 };
 
 export function isEqualConfig(a: Configuration, b: Configuration): boolean {
@@ -35,7 +43,12 @@ export function isEqualConfig(a: Configuration, b: Configuration): boolean {
 
 export function configRepo(): Repo<Configuration> {
   const c = vscode.workspace.getConfiguration(EXTENSION_NAME);
-  const key: (keyof Configuration)[] = ["branch", "remoteRepo", "srcPath"];
+  const key: (keyof Configuration)[] = [
+    "branch",
+    "remoteRepo",
+    "srcPath",
+    "readmePath",
+  ];
   return key.reduce<Repo<Configuration>>(
     (prev, current) => ({
       ...prev,
@@ -61,6 +74,7 @@ export async function loadAllConfig(): Promise<Configuration> {
     remoteRepo: await repo.remoteRepo.get(),
     branch: await repo.branch.get(),
     srcPath: await repo.srcPath.get(),
+    readmePath: await repo.readmePath.get(),
   };
 }
 
@@ -95,7 +109,7 @@ export async function complementAndSaveConfig(
         "Open Configuration": async () =>
           await vscode.commands.executeCommand(
             "workbench.action.openSettings",
-            repo.remoteRepo.fullConfigKey,
+            repo.remoteRepo.fullConfigKey
           ),
       }
     );
@@ -118,7 +132,7 @@ export async function complementAndSaveConfig(
       "Open Configuration": async () =>
         await vscode.commands.executeCommand(
           "workbench.action.openSettings",
-          repo.branch.fullConfigKey,
+          repo.branch.fullConfigKey
         ),
     });
   }
@@ -143,13 +157,14 @@ export async function complementAndSaveConfig(
         "Open Configuration": async () =>
           await vscode.commands.executeCommand(
             "workbench.action.openSettings",
-            repo.srcPath.fullConfigKey,
+            repo.srcPath.fullConfigKey
           ),
       }
     );
   }
 
   const res = {
+    ...config,
     branch,
     remoteRepo,
     srcPath,

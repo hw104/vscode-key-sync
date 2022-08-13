@@ -73,6 +73,12 @@
           "type": "string",
           "description": "Specifies an existing json file path. Examples: `keybindings.json`, `key/keybindings_win.json`.",
           "markdownDescription": "Specifies an existing json file path. Examples: `keybindings.json`, `key/keybindings_win.json`."
+        },
+        "key-sync.GitReadmePath": {
+          "type": "string",
+          "default": "README.md",
+          "description": "Specifies an README.md path. This is used to display the cheat sheet.",
+          "markdownDescription": "Specifies an README.md path. This is used to display the cheat sheet."
         }
       }
     }
