@@ -19,7 +19,8 @@
     "onCommand:key-sync.save",
     "onCommand:key-sync.load",
     "onCommand:key-sync.open",
-    "onCommand:key-sync.init"
+    "onCommand:key-sync.init",
+    "onCommand:key-sync.sync"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -39,6 +40,10 @@
       {
         "command": "key-sync.init",
         "title": "Key Sync: Initialize local repository"
+      },
+      {
+        "command": "key-sync.sync",
+        "title": "Key Sync: Sync keybindings.json with remote repository"
       }
     ],
     "configuration": {

@@ -1,17 +1,18 @@
 import * as vscode from "vscode";
 import { getGitApi } from "../git_api";
 import { getPaths } from "../paths";
+import { Repository } from "../types/git";
 import { initHandler } from "./init";
 
 export async function openHandler(
   context: vscode.ExtensionContext
-): Promise<void> {
+): Promise<Repository> {
   const gitApi = await getGitApi();
   const paths = getPaths(context);
 
   const repo = await gitApi.openRepository(vscode.Uri.parse(paths.localRepo));
   if (repo != null) {
-    return;
+    return repo;
   }
   const res = await vscode.window.showInformationMessage(
     "Cannot open repository that was not initialized.",
@@ -21,5 +22,5 @@ export async function openHandler(
   if (res !== "Initialize") {
     throw new Error("Failed to open repository");
   }
-  await initHandler(context);
+  return await initHandler(context);
 }

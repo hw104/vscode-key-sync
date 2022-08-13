@@ -8,13 +8,13 @@ import {
 } from "../config";
 import { getGitApi } from "../git_api";
 import { getPaths, Paths } from "../paths";
-import { API as GitApi } from "../types/git";
+import { API as GitApi, Repository } from "../types/git";
 
 export async function initLocalRepo(
   gitApi: GitApi,
   config: FullfiledConfig,
   paths: Paths
-): Promise<void> {
+): Promise<Repository> {
   if (!fs.existsSync(paths.globalStorage)) {
     fs.mkdirSync(paths.globalStorage, { recursive: true });
   }
@@ -33,16 +33,19 @@ export async function initLocalRepo(
   await repo.addRemote("origin", config.remoteRepo);
   await repo.fetch();
   await repo.checkout(config.branch);
+  await repo.pull();
+
+  return repo;
 }
 
 export async function initHandler(
   context: vscode.ExtensionContext
-): Promise<void> {
+): Promise<Repository> {
   const config = await complementAndSaveConfig(await loadAllConfig());
   console.log("config", config);
 
   const gitApi = await getGitApi();
   const paths = getPaths(context);
 
-  await initLocalRepo(gitApi, config, paths);
+  return await initLocalRepo(gitApi, config, paths);
 }
