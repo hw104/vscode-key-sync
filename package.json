@@ -2,7 +2,7 @@
   "name": "key-sync",
   "displayName": "Key Sync",
   "description": "Tiny VSCode Extension Synchronize **only** keybinding configuration.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "hw104",
   "engines": {
     "vscode": "^1.59.0"
@@ -77,7 +77,7 @@
         "key-sync.GitReadmePath": {
           "type": "string",
           "default": "README.md",
-          "description": "Specifies an cheat sheet markdown file path in repository. This is used to display the cheat sheet. Default is `README.md`.",
+          "description": "Specifies a cheat sheet markdown file path in repository. This is used to display the cheat sheet. Default is `README.md`.",
           "markdownDescription": "Specifies an cheat sheet markdown file path in repository. This is used to display the cheat sheet. Default is `README.md`."
         }
       }
