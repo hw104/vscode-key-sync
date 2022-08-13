@@ -20,7 +20,8 @@
     "onCommand:key-sync.load",
     "onCommand:key-sync.open",
     "onCommand:key-sync.init",
-    "onCommand:key-sync.sync"
+    "onCommand:key-sync.sync",
+    "onCommand:key-sync.close"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -44,6 +45,10 @@
       {
         "command": "key-sync.sync",
         "title": "Key Sync: Sync keybindings.json with remote repository"
+      },
+      {
+        "command": "key-sync.close",
+        "title": "Key Sync: Close local repository"
       }
     ],
     "configuration": {

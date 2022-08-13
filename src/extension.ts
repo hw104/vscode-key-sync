@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { closeHandler } from "./commands/close";
 import { initHandler } from "./commands/init";
 import { loadHandler } from "./commands/load";
 import { openHandler } from "./commands/open";
@@ -44,12 +45,16 @@ export function activate(context: vscode.ExtensionContext) {
   const sync = vscode.commands.registerCommand("key-sync.sync", async () =>
     handler(() => syncHandler(context))
   );
+  const close = vscode.commands.registerCommand("key-sync.close", async () =>
+    handler(() => closeHandler(context))
+  );
 
   context.subscriptions.push(save);
   context.subscriptions.push(load);
   context.subscriptions.push(open);
   context.subscriptions.push(init);
   context.subscriptions.push(sync);
+  context.subscriptions.push(close);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/explicit-module-boundary-types
