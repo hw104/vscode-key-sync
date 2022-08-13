@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { getGitApi } from "../git_api";
-import { getPaths } from "../paths";
+import { getPaths, Paths } from "../paths";
+import { Repository } from "../types/git";
 import { openHandler } from "./open";
 import { saveHandler } from "./save";
 
@@ -10,8 +10,10 @@ export async function syncHandler(
   await saveHandler(context);
   const repo = await openHandler(context);
   const paths = getPaths(context);
-  // const git = await getGitApi();
+  await innerHandler(repo, paths);
+}
 
+async function innerHandler(repo: Repository, paths: Paths): Promise<void> {
   await repo.fetch();
   await repo.status();
   const isChanged =
@@ -20,24 +22,47 @@ export async function syncHandler(
       ...repo.state.mergeChanges,
       ...repo.state.workingTreeChanges,
     ].length !== 0;
-
-    repo.state.HEAD.
+  const isAhead = (repo.state.HEAD?.ahead ?? 0) > 0;
+  const isBehind = (repo.state.HEAD?.behind ?? 0) > 0;
 
   if (isChanged) {
-    vscode.window.showInformationMessage(
+    const res = await vscode.window.showInformationMessage(
       "Changes detected. Do you want to commit?",
-      "Commit",
-      "Commit & Push",
+      "Yes",
       "No"
     );
+    if (res === "Yes") {
+      await vscode.commands.executeCommand("git.commit", paths.localRepo);
+      return await innerHandler(repo, paths);
+    }
   }
 
-  // commit
-  /* if (changes.length !== 0) {
-    const res = await vscode.commands.executeCommand(
-      "git.commit",
-      paths.localRepo
+  if (isAhead) {
+    const res = await vscode.window.showInformationMessage(
+      `Your branch is ahead of ` +
+        `'${repo.state.HEAD?.upstream?.remote}/${repo.state.HEAD?.upstream?.name}'` +
+        ` by ${repo.state.HEAD?.ahead} commit. Do you want to push?`,
+      "Yes",
+      "No"
     );
-    console.log("res", res);
-  } */
+    if (res === "Yes") {
+      await repo.push();
+      return await innerHandler(repo, paths);
+    }
+  }
+
+  if (isBehind) {
+    const res = await vscode.window.showInformationMessage(
+      `Your branch is behind ` +
+        `'${repo.state.HEAD?.upstream?.remote}/${repo.state.HEAD?.upstream?.name}'` +
+        ` by ${repo.state.HEAD?.behind} commit. Do you want to pull?`,
+      "Yes",
+      "No"
+    );
+    if (res === "Yes") {
+      await repo.pull();
+    }
+  }
+
+  return;
 }
