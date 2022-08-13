@@ -77,8 +77,8 @@
         "key-sync.GitReadmePath": {
           "type": "string",
           "default": "README.md",
-          "description": "Specifies an README.md path. This is used to display the cheat sheet.",
-          "markdownDescription": "Specifies an README.md path. This is used to display the cheat sheet."
+          "description": "Specifies an cheat sheet markdown file path in repository. This is used to display the cheat sheet. Default is `README.md`.",
+          "markdownDescription": "Specifies an cheat sheet markdown file path in repository. This is used to display the cheat sheet. Default is `README.md`."
         }
       }
     }
