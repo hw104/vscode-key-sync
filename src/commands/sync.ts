@@ -15,17 +15,25 @@ export async function syncHandler(
   const paths = getPaths(context);
 
   const actions = await sync(repo, paths);
-  console.log("actions", actions);
-  vscode.window.showInformationMessage(
-    actions.length !== 0 ? "Sync finished." : "There was nothing to do."
-  );
-  await closeRepoIfOpen(paths, await getGitApi());
+
+  let toClose: boolean;
+  if (actions == null) {
+    vscode.window.showInformationMessage("There was nothing to do.");
+    toClose = true;
+  } else {
+    toClose = await showYesNoMessage(
+      "Sync finished. Do you want to close repository?"
+    );
+  }
+  if (toClose) {
+    await closeRepoIfOpen(paths, await getGitApi());
+  }
 }
 
 async function sync(
   repo: Repository,
   paths: Paths
-): Promise<("commit" | "push" | "pull")[]> {
+): Promise<("commit" | "push" | "pull")[] | undefined> {
   await repo.fetch();
   await repo.status();
   const isChanged =
@@ -37,10 +45,14 @@ async function sync(
   const isAhead = (repo.state.HEAD?.ahead ?? 0) > 0;
   const isBehind = (repo.state.HEAD?.behind ?? 0) > 0;
 
+  if (!isChanged && !isAhead && !isBehind) {
+    return;
+  }
+
   if (isChanged) {
     if (await showYesNoMessage("Changes detected. Do you want to commit?")) {
       await vscode.commands.executeCommand("git.commit", paths.localRepo);
-      return ["commit", ...(await sync(repo, paths))];
+      return ["commit", ...((await sync(repo, paths)) ?? [])];
     }
   }
 
@@ -51,7 +63,7 @@ async function sync(
       ` by ${repo.state.HEAD?.ahead} commit. Do you want to push?`;
     if (await showYesNoMessage(message)) {
       await repo.push();
-      return ["push", ...(await sync(repo, paths))];
+      return ["push", ...((await sync(repo, paths)) ?? [])];
     }
   }
 

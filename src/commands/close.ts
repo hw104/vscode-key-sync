@@ -23,5 +23,6 @@ export async function closeRepoIfOpen(paths: Paths, git: Git): Promise<boolean> 
 }
 
 // TODO: close when end
+//  - [x] sync
 // TODO: show diff option
 // TODO: jump to README.md
