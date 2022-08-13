@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as vscode from "vscode";
-import { checkConfig, loadAllConfig } from "../config";
-import { getPaths } from "../paths";
+import { checkConfig, FullfiledConfig, loadAllConfig } from "../config";
+import { getPaths, Paths } from "../paths";
 import { openHandler } from "./open";
 
 export async function saveHandler(
@@ -15,6 +15,10 @@ export async function saveHandler(
     throw new Error("Unreachable");
   }
 
+  save(paths, config);
+}
+
+export function save(paths: Paths, config: FullfiledConfig): void {
   const src = paths.originalKeybindngs;
   const dist = paths.repoKeybindings(config);
 

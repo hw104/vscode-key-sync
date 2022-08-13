@@ -21,8 +21,3 @@ export async function closeRepoIfOpen(paths: Paths, git: Git): Promise<boolean> 
   await vscode.commands.executeCommand("git.close", paths.localRepo);
   return true;
 }
-
-// TODO: close when end
-//  - [x] sync
-// TODO: show diff option
-// TODO: jump to README.md

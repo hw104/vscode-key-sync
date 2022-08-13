@@ -21,18 +21,19 @@
     "onCommand:key-sync.open",
     "onCommand:key-sync.init",
     "onCommand:key-sync.sync",
-    "onCommand:key-sync.close"
+    "onCommand:key-sync.close",
+    "onCommand:key-sync.cheat"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "key-sync.save",
-        "title": "Key Sync: Save keyboard shortcuts to local repository"
+        "title": "Key Sync: Save keyboard shortcuts to keybindings.son in the local repository"
       },
       {
         "command": "key-sync.load",
-        "title": "Key Sync: Load local repository json file to keyboard shortcuts"
+        "title": "Key Sync: Load keybindings.json from the local repository into keyboard shortcuts"
       },
       {
         "command": "key-sync.open",
@@ -49,6 +50,10 @@
       {
         "command": "key-sync.close",
         "title": "Key Sync: Close local repository"
+      },
+      {
+        "command": "key-sync.cheat",
+        "title": "Key Sync: Open the cheat sheet (README.md)"
       }
     ],
     "configuration": {
