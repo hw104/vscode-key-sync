@@ -21,18 +21,14 @@ export async function syncHandler(
   }
 
   const actions = await sync(repo, paths, config);
-
-  let toClose: boolean;
   if (actions == null) {
     vscode.window.showInformationMessage("There was nothing to do.");
-    toClose = true;
-  } else {
-    toClose =
-      (await showYesNoMessage(
-        "Sync finished. Do you want to close repository?"
-      )) ?? false;
+    await closeRepoIfOpen(paths, await getGitApi());
+    return;
   }
-  if (toClose) {
+
+  const res = await showYesNoMessage("Sync finished. Do you want to close repository?");
+  if (res) {
     await closeRepoIfOpen(paths, await getGitApi());
   }
 }
