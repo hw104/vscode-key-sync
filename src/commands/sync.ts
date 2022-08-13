@@ -14,15 +14,18 @@ export async function syncHandler(
   const repo = await openHandler(context);
   const paths = getPaths(context);
 
-  await innerHandler(repo, paths);
-  if (await showYesNoMessage(
-    "Sync finished. Do you want close repository?"
-  )) {
-    await closeRepoIfOpen(paths, await getGitApi());
-  }
+  const actions = await sync(repo, paths);
+  console.log("actions", actions);
+  vscode.window.showInformationMessage(
+    actions.length !== 0 ? "Sync finished." : "There was nothing to do."
+  );
+  await closeRepoIfOpen(paths, await getGitApi());
 }
 
-async function innerHandler(repo: Repository, paths: Paths): Promise<void> {
+async function sync(
+  repo: Repository,
+  paths: Paths
+): Promise<("commit" | "push" | "pull")[]> {
   await repo.fetch();
   await repo.status();
   const isChanged =
@@ -37,7 +40,7 @@ async function innerHandler(repo: Repository, paths: Paths): Promise<void> {
   if (isChanged) {
     if (await showYesNoMessage("Changes detected. Do you want to commit?")) {
       await vscode.commands.executeCommand("git.commit", paths.localRepo);
-      return await innerHandler(repo, paths);
+      return ["commit", ...(await sync(repo, paths))];
     }
   }
 
@@ -48,7 +51,7 @@ async function innerHandler(repo: Repository, paths: Paths): Promise<void> {
       ` by ${repo.state.HEAD?.ahead} commit. Do you want to push?`;
     if (await showYesNoMessage(message)) {
       await repo.push();
-      return await innerHandler(repo, paths);
+      return ["push", ...(await sync(repo, paths))];
     }
   }
 
@@ -60,6 +63,9 @@ async function innerHandler(repo: Repository, paths: Paths): Promise<void> {
 
     if (await showYesNoMessage(message)) {
       await repo.pull();
+      return ["pull"];
     }
   }
+
+  return [];
 }
