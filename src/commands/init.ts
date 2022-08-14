@@ -16,7 +16,6 @@ export async function initLocalRepo(
 ): Promise<Repository> {
   if (fs.existsSync(paths.localRepo.fsPath)) {
     fs.rmSync(paths.localRepo.fsPath, { recursive: true, force: true });
-    fs.rmdirSync(paths.localRepo.fsPath);
   }
 
   fs.mkdirSync(paths.localRepo.fsPath, { recursive: true });
