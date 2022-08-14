@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import * as fs from "fs";
 import * as vscode from "vscode";
 import {
@@ -15,18 +14,14 @@ export async function initLocalRepo(
   config: FullfiledConfig,
   paths: Paths
 ): Promise<Repository> {
-  if (!fs.existsSync(paths.globalStorage)) {
-    fs.mkdirSync(paths.globalStorage, { recursive: true });
+  if (fs.existsSync(paths.localRepo.fsPath)) {
+    fs.rmSync(paths.localRepo.fsPath, { recursive: true, force: true });
+    fs.rmdirSync(paths.localRepo.fsPath);
   }
 
-  if (!fs.existsSync(paths.localRepo)) {
-    fs.mkdirSync(paths.localRepo, { recursive: true });
-  } else {
-    fs.rmSync(paths.localRepo, { recursive: true, force: true });
-    fs.rmdir(paths.localRepo, () => null);
-  }
+  fs.mkdirSync(paths.localRepo.fsPath, { recursive: true });
 
-  const repo = await gitApi.init(vscode.Uri.parse(paths.localRepo));
+  const repo = await gitApi.init(paths.localRepo);
   if (repo == null) {
     throw Error("Initialize git repository failure");
   }
@@ -44,8 +39,5 @@ export async function initHandler(
   const config = await complementAndSaveConfig(await loadAllConfig());
   console.log("config", config);
 
-  const gitApi = await getGitApi();
-  const paths = getPaths(context);
-
-  return await initLocalRepo(gitApi, config, paths);
+  return await initLocalRepo(await getGitApi(), config, getPaths(context));
 }

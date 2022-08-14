@@ -11,7 +11,7 @@ export async function cheatHandler(
     (await configRepo().readmePath.get()) ?? "README.md"
   );
 
-  if (!fs.existsSync(readmePath)) {
+  if (!fs.existsSync(readmePath.fsPath)) {
     const repo = configRepo();
     throw new ErrorWithAction(
       "Please initialize local repository or check configuration",
@@ -26,6 +26,5 @@ export async function cheatHandler(
     );
   }
 
-  const uri = vscode.Uri.file(readmePath);
-  await vscode.commands.executeCommand("markdown.showPreview", uri);
+  await vscode.commands.executeCommand("markdown.showPreview", readmePath);
 }

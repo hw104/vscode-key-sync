@@ -13,7 +13,7 @@ export async function closeHandler(
 
 export async function closeRepoIfOpen(paths: Paths, git: Git): Promise<boolean> {
   const repo = git.repositories.find(
-    (repo) => repo.rootUri.path === paths.localRepo
+    (repo) => repo.rootUri.fsPath === paths.localRepo.fsPath
   );
   if (repo == null) {
     return false;

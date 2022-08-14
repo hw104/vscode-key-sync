@@ -19,8 +19,8 @@ export async function saveHandler(
 }
 
 export function save(paths: Paths, config: FullfiledConfig): void {
-  const src = paths.originalKeybindngs;
-  const dist = paths.repoKeybindings(config);
+  const src = paths.originalKeybindngs.fsPath;
+  const dist = paths.repoKeybindings(config).fsPath;
 
   if (!fs.existsSync(src)) {
     throw new Error(`${src} is not exists`);

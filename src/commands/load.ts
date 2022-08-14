@@ -19,8 +19,8 @@ export async function loadHandler(
 }
 
 export function load(paths: Paths, config: FullfiledConfig): void {
-  const src = paths.repoKeybindings(config);
-  const dist = paths.originalKeybindngs;
+  const src = paths.repoKeybindings(config).fsPath;
+  const dist = paths.originalKeybindngs.fsPath;
 
   if (!fs.existsSync(src)) {
     throw new Error(`${src} is not exists`);

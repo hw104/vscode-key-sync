@@ -51,8 +51,8 @@ async function sync(
   const isAhead = (repo.state.HEAD?.ahead ?? 0) > 0;
   const isBehind = (repo.state.HEAD?.behind ?? 0) > 0;
   const isDifference =
-    fs.readFileSync(paths.repoKeybindings(config)).toString() !==
-    fs.readFileSync(paths.originalKeybindngs).toString();
+    fs.readFileSync(paths.repoKeybindings(config).fsPath).toString() !==
+    fs.readFileSync(paths.originalKeybindngs.fsPath).toString();
 
   if (!isChanged && !isAhead && !isBehind && !isDifference) {
     return;
