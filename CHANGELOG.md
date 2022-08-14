@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.2.1
+
+- fix init commands bug
+- fix path for windows
+
 ## 0.2.0
 
 Add commands
